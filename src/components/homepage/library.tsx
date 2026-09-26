@@ -113,7 +113,8 @@ export default function Library() {
       </section>
 
    
-      <section className="mx-auto max-w-350 px-4 pb-12 pt-4 sm:px-7">
+      <section id="library"
+  className="mx-auto max-w-350 px-4 pb-12 pt-4 sm:px-7">
 
         {loading ? (
           <div className="flex min-h-100 flex-col items-center justify-center">

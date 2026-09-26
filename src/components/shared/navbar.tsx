@@ -21,7 +21,6 @@ export default function Navbar() {
       setSavedCount(Array.isArray(saved) ? saved.length : 0);
     } catch (error) {
       console.error("Count update error:", error);
-
       setPlanCount(0);
       setSavedCount(0);
     }
@@ -67,8 +66,6 @@ export default function Navbar() {
 
         {/* Middle Navigation */}
         <nav className="hidden items-center gap-2 sm:flex">
-
-          {/* Workout */}
           <Link
             href="/#library"
             className="rounded-md px-4 py-2 text-[9px] font-bold uppercase tracking-wide text-[#858a91] transition hover:bg-[#15181e] hover:text-white"
@@ -76,22 +73,20 @@ export default function Navbar() {
             Workout
           </Link>
 
-          {/* My Plan */}
           <Link
-            href="/my-plan"
+            href="/my-plan?tab=plan"
             className="rounded-md bg-[#171a20] px-4 py-2 text-[9px] font-bold uppercase tracking-wide text-white"
           >
             My Plan
           </Link>
-
         </nav>
 
         {/* Right Side */}
         <div className="flex items-center gap-2 sm:gap-3">
 
-          {/* Plan */}
+          {/* Plan Button */}
           <Link
-            href="/my-plan"
+            href="/my-plan?tab=plan"
             className="flex items-center gap-2 rounded-md border border-[#24272c] bg-[#101216] px-2.5 py-2 transition hover:border-[#3a3f46]"
           >
             <span className="text-[8px] font-bold uppercase tracking-wide text-[#858a91]">
@@ -103,9 +98,9 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Saved */}
+          {/* Saved Button */}
           <Link
-            href="/my-plan"
+            href="/my-plan?tab=saved"
             className="flex items-center gap-2 rounded-md border border-[#24272c] bg-[#101216] px-2.5 py-2 transition hover:border-[#3a3f46]"
           >
             <span className="text-[8px] font-bold uppercase tracking-wide text-[#858a91]">
