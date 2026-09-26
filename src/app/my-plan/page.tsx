@@ -26,7 +26,7 @@ function MyPlanContent() {
   const router = useRouter();
   const tabQuery = searchParams.get("tab");
 
-  const activeTab: "plan" | "saved" = tabQuery === "saved" ? "saved" : "plan";
+  const activeTab = tabQuery === "saved" ? "saved" : "plan";
   const [todayPlan, setTodayPlan] = useState<Exercise[]>([]);
   const [savedExercises, setSavedExercises] = useState<Exercise[]>([]);
   const [sortBy, setSortBy] = useState("Duration");
@@ -43,11 +43,12 @@ function MyPlanContent() {
   };
 
   useEffect(() => {
-    const timeoutId = window.setTimeout(loadData, 0);
+   
+    const initialLoad = window.setTimeout(loadData, 0);
     window.addEventListener("fitlog-storage-update", loadData);
     window.addEventListener("storage", loadData);
     return () => {
-      window.clearTimeout(timeoutId);
+      window.clearTimeout(initialLoad);
       window.removeEventListener("fitlog-storage-update", loadData);
       window.removeEventListener("storage", loadData);
     };
@@ -76,7 +77,6 @@ function MyPlanContent() {
     <main className="min-h-screen bg-[#08090b] text-white px-4 py-8">
       <div className="mx-auto max-w-350 space-y-6">
         
-       
         <div>
           <h1 className="text-2xl font-black uppercase tracking-wide">MY PLAN</h1>
           <p className="text-[10px] text-[#73777d] mt-1">
@@ -100,11 +100,11 @@ function MyPlanContent() {
           </div>
         </div>
 
-       
+        {/* Tabs & Filters */}
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-[#1b1e22] pb-4">
           <div className="flex gap-2 bg-[#101216] p-1 rounded-lg border border-[#1b1e22]">
             <button
-              onClick={() => router.push("/my-plane?tab=plan")}
+              onClick={() => router.replace("?tab=plan")}
               className={`px-4 py-2 rounded-md text-[9px] font-extrabold uppercase transition ${
                 activeTab === "plan" ? "bg-[#1b1e22] text-white" : "text-[#73777d] hover:text-white"
               }`}
@@ -112,7 +112,7 @@ function MyPlanContent() {
               Today&apos;s Plan
             </button>
             <button
-              onClick={() => router.push("/my-plane?tab=saved")}
+              onClick={() => router.replace("?tab=saved")}
               className={`px-4 py-2 rounded-md text-[9px] font-extrabold uppercase transition ${
                 activeTab === "saved" ? "bg-[#1b1e22] text-white" : "text-[#73777d] hover:text-white"
               }`}
@@ -134,7 +134,7 @@ function MyPlanContent() {
           </div>
         </div>
 
-
+       
         {currentList.length === 0 ? (
           <div className="flex flex-col items-center justify-center border border-dashed border-[#24272b] rounded-2xl py-20 text-center bg-[#101216]/50">
             <h2 className="text-base font-bold text-[#ddd]">NOTHING HERE YET</h2>
