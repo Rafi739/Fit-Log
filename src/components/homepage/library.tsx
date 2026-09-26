@@ -68,7 +68,7 @@ export default function Library() {
     <main className="min-h-screen bg-[#08090b] text-white">
 
       <header className="border-b border-[#1b1d20] px-4 py-5 sm:px-7">
-        <div className="mx-auto max-w-350">
+        <div className="mx-auto max-w-275 text-center">
           <h1 className="text-[17px] font-extrabold tracking-[0.16em]">
             THE LIBRARY
           </h1>
@@ -80,7 +80,7 @@ export default function Library() {
       </header>
 
    
-      <section className="mx-auto max-w-350 px-4 pt-4 sm:px-7">
+      <section className="mx-auto max-w-275 px-4 pt-4 sm:px-7">
         <div className="flex flex-wrap gap-1.5">
           {filters.map((filter) => {
             const active = activeFilter === filter;
@@ -89,15 +89,7 @@ export default function Library() {
               <button
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
-                className={`
-                  rounded-sm
-                  border
-                  px-3
-                  py-1.5
-                  text-[9px]
-                  font-bold
-                  transition-all
-                  duration-200
+                className={` rounded-sm border px-3 py-1.5 text-[9px] font-bold transition-all duration-200
                   ${
                     active
                       ? "border-[#d6ff38] bg-[#d6ff38] text-black"
@@ -114,7 +106,7 @@ export default function Library() {
 
    
       <section id="library"
-  className="mx-auto max-w-350 px-4 pb-12 pt-4 sm:px-7">
+  className="mx-auto max-w-275 px-4 pb-12 pt-4 sm:px-7">
 
         {loading ? (
           <div className="flex min-h-100 flex-col items-center justify-center">
@@ -186,15 +178,7 @@ function ExerciseCard({
         <div className="mb-2 flex flex-wrap items-center gap-1">
 
           <span
-            className={`
-              rounded-[3px]
-              px-1.5
-              py-0.75
-              text-[7px]
-              font-extrabold
-              uppercase
-              tracking-wide
-              text-black
+            className={` rounded-[3px] px-1.5 py-0.75 text-[7px] font-extrabold uppercase tracking-wide text-black
               ${
                 exercise.difficulty === "Advanced"
                   ? "bg-[#ffcf36]"
@@ -217,51 +201,29 @@ function ExerciseCard({
         </div>
 
        
-        <h2 className="text-xs font-extrabold uppercase leading-tight tracking-wide text-[#f4f4f4]">
-          {exercise.name}
-        </h2>
+        <h2 className="text-xs font-extrabold uppercase leading-tight tracking-wide text-[#f4f4f4]"> {exercise.name} </h2>
 
         
-        <p className="mt-1.5 line-clamp-2 text-[8.5px] leading-[1.55] text-[#686d74]">
-          {exercise.description}
-        </p>
+        <p className="mt-1.5 line-clamp-2 text-[8.5px] leading-[1.55] text-[#686d74]"> {exercise.description} </p>
 
       
         <div className="mt-2.5 flex items-center gap-3 border-b border-[#1d2024] pb-2.5">
 
-          <MetaItem
-            icon="◷"
-            value={`${exercise.duration} min`}
-          />
+          <MetaItem icon="◷" value={`${exercise.duration} min`} />
 
-          <MetaItem
-            icon="🔥"
-            value={`${exercise.caloriesBurned} kcal`}
-          />
+          <MetaItem icon="🔥" value={`${exercise.caloriesBurned} kcal`} />
 
-          <MetaItem
-            icon="★"
-            value={exercise.rating.toString()}
-          />
+          <MetaItem icon="★" value={exercise.rating.toString()} />
 
         </div>
 
         <div className="grid grid-cols-[0.6fr_0.7fr_1.7fr] gap-2 pt-2.5">
 
-          <Detail
-            label="SETS"
-            value={exercise.sets}
-          />
+          <Detail label="SETS" value={exercise.sets} />
 
-          <Detail
-            label="REPS"
-            value={exercise.reps}
-          />
+          <Detail label="REPS" value={exercise.reps} />
 
-          <Detail
-            label="EQUIPMENT"
-            value={exercise.equipment}
-          />
+          <Detail label="EQUIPMENT" value={exercise.equipment} />
 
         </div>
 

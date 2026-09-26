@@ -35,13 +35,7 @@ export default function Hero() {
 
       
         <div className="absolute right-8 bottom-0 flex h-full w-70 items-end justify-center max-sm:hidden">
-          <Image
-            src={banner}
-            alt="Workout"
-            width={280}
-            height={215}
-            className="h-53.75 w-auto object-contain"
-          />
+          <Image src={banner} alt="Workout" width={280} height={215} className="h-53.75 w-auto object-contain" />
         </div>
 
       </div>

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -31,31 +32,25 @@ export default function Details({ id }: DetailsProps) {
   const [addedToPlan, setAddedToPlan] = useState(false);
   const [saved, setSaved] = useState(false);
 
+  
+  const [toast, setToast] = useState("");
+
   useEffect(() => {
     const loadExercise = async () => {
       try {
         const response = await fetch("/fitlog.json");
 
-        if (!response.ok) {
-          throw new Error("Failed to load exercises");
-        }
+        if (!response.ok) { throw new Error("Failed to load exercises"); }
 
         const data: Exercise[] = await response.json();
 
-        const selectedExercise = data.find(
-          (item) => item.id.toString() === id
-        );
+        const selectedExercise = data.find( (item) => item.id.toString() === id );
 
         setExercise(selectedExercise || null);
 
-        if (selectedExercise) {
-          const plan = JSON.parse(
-            localStorage.getItem("todaysPlan") || "[]"
-          );
+        if (selectedExercise) { const plan = JSON.parse( localStorage.getItem("todaysPlan") || "[]" );
 
-          const savedExercises = JSON.parse(
-            localStorage.getItem("savedExercises") || "[]"
-          );
+          const savedExercises = JSON.parse( localStorage.getItem("savedExercises") || "[]" );
 
           setAddedToPlan(
             Array.isArray(plan) &&
@@ -83,36 +78,54 @@ export default function Details({ id }: DetailsProps) {
     loadExercise();
   }, [id]);
 
+  
+  const showToast = (message: string) => {
+    setToast(message);
+
+    window.setTimeout(() => {
+      setToast("");
+    }, 2500);
+  };
+
+
   const handleAddToPlan = () => {
     if (!exercise) return;
 
     try {
-      const currentPlan: Exercise[] = JSON.parse(
-        localStorage.getItem("todaysPlan") || "[]"
-      );
+      const currentPlan: Exercise[] = JSON.parse( localStorage.getItem("todaysPlan") || "[]" );
 
-      const alreadyAdded = currentPlan.some(
-        (item) => item.id === exercise.id
-      );
+      const alreadyAdded = currentPlan.some( (item) => item.id === exercise.id );
 
-      if (!alreadyAdded) {
-        const updatedPlan = [...currentPlan, exercise];
-
-        localStorage.setItem(
-          "todaysPlan",
-          JSON.stringify(updatedPlan)
-        );
-
-        setAddedToPlan(true);
-
-        window.dispatchEvent(
-          new Event("fitlog-storage-update")
-        );
+      if (alreadyAdded) {
+        showToast("Already in today's plan");
+        return;
       }
+
+   
+      if (currentPlan.length >= 5) {
+        showToast("Today's plan is full");
+        return;
+      }
+
+      const updatedPlan = [...currentPlan, exercise];
+
+      localStorage.setItem(
+        "todaysPlan",
+        JSON.stringify(updatedPlan)
+      );
+
+      setAddedToPlan(true);
+
+      window.dispatchEvent(
+        new Event("fitlog-storage-update")
+      );
+
+      showToast("Added to today's plan");
     } catch (error) {
       console.error("Plan save error:", error);
     }
   };
+
 
   const handleSave = () => {
     if (!exercise) return;
@@ -126,20 +139,26 @@ export default function Details({ id }: DetailsProps) {
         (item) => item.id === exercise.id
       );
 
-      if (!alreadySaved) {
-        const updatedSaved = [...currentSaved, exercise];
-
-        localStorage.setItem(
-          "savedExercises",
-          JSON.stringify(updatedSaved)
-        );
-
-        setSaved(true);
-
-        window.dispatchEvent(
-          new Event("fitlog-storage-update")
-        );
+      if (alreadySaved) {
+        showToast("Already saved");
+        return;
       }
+
+      const updatedSaved = [...currentSaved, exercise];
+
+      localStorage.setItem(
+        "savedExercises",
+        JSON.stringify(updatedSaved)
+      );
+
+      setSaved(true);
+
+      window.dispatchEvent(
+        new Event("fitlog-storage-update")
+      );
+
+     
+      showToast("Saved for later");
     } catch (error) {
       console.error("Save error:", error);
     }
@@ -181,9 +200,9 @@ export default function Details({ id }: DetailsProps) {
 
       <div className="mx-auto w-full max-w-151.25 px-3.5 py-6.5">
 
-        
         <div className="grid grid-cols-1 gap-7 sm:grid-cols-[290px_1fr] sm:gap-7">
 
+         
           <div className="relative h-90.75 w-full overflow-hidden rounded-[7px] sm:h-90.75 sm:w-72.5">
 
             <Image
@@ -197,6 +216,7 @@ export default function Details({ id }: DetailsProps) {
 
           </div>
 
+      
           <div className="flex min-w-0 flex-col">
 
             <h1 className="text-[18px] font-black uppercase leading-[1.05] tracking-[-0.03em]">
@@ -207,7 +227,9 @@ export default function Details({ id }: DetailsProps) {
               {exercise.description}
             </p>
 
+          
             <div className="mt-2 flex gap-1.25">
+
               {exercise.muscleGroups.map((muscle) => (
                 <span
                   key={muscle}
@@ -216,8 +238,10 @@ export default function Details({ id }: DetailsProps) {
                   {muscle}
                 </span>
               ))}
+
             </div>
 
+          
             <div className="mt-3 w-full overflow-hidden rounded-[7px] border border-[#1b1e22]">
 
               <InfoRow label="EQUIPMENT" value={exercise.equipment} />
@@ -236,18 +260,19 @@ export default function Details({ id }: DetailsProps) {
 
             </div>
 
+            
             <div className="mt-4.25">
 
-              <h2 className="text-[8px] font-black uppercase tracking-[0.04em]">
-                Instructions
-              </h2>
+              <h2 className="text-[8px] font-black uppercase tracking-[0.04em]"> Instructions </h2>
 
               <div className="mt-1.75 space-y-1.25">
 
                 {exercise.instructions.map(
                   (instruction, index) => (
                     <div key={index} className="flex gap-1.75" >
-                      <span className="w-1.75 shrink-0 text-[7px] leading-normal text-[#6d7279]"> {index + 1}. </span>
+                      <span className="w-1.75 shrink-0 text-[7px] leading-normal text-[#6d7279]">
+                        {index + 1}.
+                      </span>
 
                       <p className="text-[7px] leading-normal text-[#777c83]"> {instruction} </p>
                     </div>
@@ -255,10 +280,13 @@ export default function Details({ id }: DetailsProps) {
                 )}
 
               </div>
+
             </div>
 
+      
             <div className="mt-auto flex gap-1.75 pt-3.75">
 
+          
               <button
                 onClick={handleAddToPlan}
                 className={`flex h-5.5 items-center gap-1.25 rounded-[5px] px-2.5 text-[7px] font-black uppercase transition ${
@@ -267,15 +295,14 @@ export default function Details({ id }: DetailsProps) {
                     : "bg-[#d6ff38] text-black hover:bg-[#c7ef2d]"
                 }`}
               >
-                <span className="text-[8px]">
-                  {addedToPlan ? "✓" : "▣"}
-                </span>
+                <span className="text-[8px]"> {addedToPlan ? "✓" : "▣"} </span>
 
                 {addedToPlan
                   ? "Added to today's plan"
                   : "Add to today's plan"}
               </button>
 
+             
               <button
                 onClick={handleSave}
                 className={`flex h-5.5 items-center gap-1.25 rounded-[5px] border px-2.5 text-[7px] font-black uppercase transition ${
@@ -296,10 +323,29 @@ export default function Details({ id }: DetailsProps) {
           </div>
         </div>
       </div>
+
+    
+      {toast && (
+        <div className="fixed bottom-6 right-6 z-100 rounded-lg border border-[#2a2d32] bg-[#101216] px-4 py-3 shadow-xl">
+
+          <div className="flex items-center gap-2">
+
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#d6ff38] text-[10px] font-black text-black">
+              ✓
+            </span>
+
+            <span className="text-[10px] font-bold text-white">
+              {toast}
+            </span>
+
+          </div>
+
+        </div>
+      )}
+
     </main>
   );
 }
-
 
 function InfoRow({
   label,
